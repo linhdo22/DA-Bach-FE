@@ -1,15 +1,16 @@
-import { Button, Row, Typography, notification } from "antd";
+import { Button, Input, Row, Typography, notification } from "antd";
 import React, { useEffect, useState } from "react";
-import accountService from "../../api/account.api";
 import usePagination from "../../hook/usePagination";
-import AccountTable from "./AccountTable";
-import AddAccountModal from "./AddAccountModal";
-import UpdateAccountModal from "./UpdateAccountModal";
+import DrugTable from "./DrugTable";
+import drugService from "../../api/drug.api";
+import AddDrugModal from "./AddDrugModal";
+import UpdateDrugModal from "./UpdateDrugModal";
 
-const AccountPage = () => {
+const DrugPage = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
-  const [updatingAccount, setUpdatingAccount] = useState();
-  const [accountList, setAccountList] = useState([]);
+  const [updatingDrug, setUpdatingDrug] = useState();
+  const [searchText, setSearchText] = useState("");
+  const [drugList, setDrugList] = useState([]);
   const { PaginationComponent, paginationOptions, setPaginationOptions } =
     usePagination({
       onChange: (page) => {
@@ -17,9 +18,9 @@ const AccountPage = () => {
       },
     });
 
-  const handleRemove = async (account) => {
+  const handleRemove = async (drug) => {
     try {
-      await accountService.remove({ accountId: account.id });
+      await drugService.remove({ id: drug.id });
       notification.success({ message: "Removed" });
       fetchList();
     } catch (error) {
@@ -33,19 +34,20 @@ const AccountPage = () => {
     fetchList();
   };
   const handleUpdateSuccess = () => {
-    setUpdatingAccount(undefined);
+    setUpdatingDrug(undefined);
     fetchList();
   };
 
   async function fetchList(page) {
     try {
-      const response = await accountService.getList({
+      const response = await drugService.getList({
         page: page ?? paginationOptions.page,
         limit: paginationOptions.limit,
+        name: searchText,
       });
       const { results, ...others } = response.data;
       setPaginationOptions(others);
-      setAccountList(results || []);
+      setDrugList(results || []);
     } catch (error) {
       console.error(error);
     }
@@ -58,16 +60,24 @@ const AccountPage = () => {
   return (
     <>
       <div style={{ padding: 20, paddingTop: 0 }}>
-        <Typography.Title level={3}>Account Management</Typography.Title>
+        <Typography.Title level={3}>Drug Management</Typography.Title>
         <div style={{ margin: "16px 0px" }}>
           <Button type="primary" onClick={() => setAddModalOpen(true)}>
             Add New
           </Button>
         </div>
-        <AccountTable
-          onUpdate={setUpdatingAccount}
+        <div style={{ width: 450, margin: "14px 0px" }}>
+          <Input.Search
+            onSearch={() => fetchList(1)}
+            placeholder="Filter by name"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+        <DrugTable
+          onUpdate={setUpdatingDrug}
           onRemove={handleRemove}
-          list={accountList}
+          list={drugList}
           offset={paginationOptions.limit * (paginationOptions.page - 1)}
         />
         <Row justify="end" style={{ marginTop: 20 }}>
@@ -75,15 +85,15 @@ const AccountPage = () => {
         </Row>
       </div>
       {addModalOpen && (
-        <AddAccountModal
+        <AddDrugModal
           onCancel={() => setAddModalOpen(false)}
-          onSucces={handleCreateSuccess}
+          onSuccess={handleCreateSuccess}
         />
       )}
-      {updatingAccount && (
-        <UpdateAccountModal
-          account={updatingAccount}
-          onCancel={() => setUpdatingAccount(undefined)}
+      {updatingDrug && (
+        <UpdateDrugModal
+          drug={updatingDrug}
+          onCancel={() => setUpdatingDrug(undefined)}
           onSuccess={handleUpdateSuccess}
         />
       )}
@@ -91,4 +101,4 @@ const AccountPage = () => {
   );
 };
 
-export default AccountPage;
+export default DrugPage;

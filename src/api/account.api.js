@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ServiceBase } from "./base";
 
 class AccountService extends ServiceBase {

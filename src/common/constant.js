@@ -12,4 +12,5 @@ export const ROUTE_PATH = {
   //private route
   HOME: "/",
   ACCOUNT: "/account",
+  DRUG: "/drug",
 };

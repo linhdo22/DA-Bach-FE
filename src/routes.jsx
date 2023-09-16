@@ -8,6 +8,7 @@ import HomePage from "./view/home/HomePage";
 import AccountPage from "./view/account/AccountPage";
 import PrivateRoutes from "./view/layout/PrivateRoutes";
 import UnauthorizedRoutes from "./view/layout/UnauthorizedRoutes";
+import DrugPage from "./view/drug/DrugPage";
 
 const LIST_PUBLIC_ROUTE = [
   {
@@ -32,6 +33,11 @@ const LIST_PRIVATE_ROUTE = [
     title: "Account Management",
     path: ROUTE_PATH.ACCOUNT,
     component: <AccountPage />,
+  },
+  {
+    title: "Drug Management",
+    path: ROUTE_PATH.DRUG,
+    component: <DrugPage />,
   },
 ];
 

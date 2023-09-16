@@ -8,7 +8,6 @@ const UpdateAccountModal = ({ onCancel, account, onSuccess }) => {
     try {
       // eslint-disable-next-line no-unused-vars
       const { email, password, role, confirmPassword, ...profileData } = values;
-      console.log(values);
       await accountService.update({
         account: { id: account.id, password },
         profile: profileData,

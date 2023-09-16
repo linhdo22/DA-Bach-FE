@@ -33,7 +33,6 @@ class HttpClient {
       async (error) => {
         const { refresh: refreshToken } =
           store.getState().authentication.tokens;
-        console.log(refreshToken);
         const refreshTokenURL = "/auth/refresh-token";
         const originalRequest = error.config;
 
@@ -47,7 +46,7 @@ class HttpClient {
 
           // Call your refresh token API here to get a new access token
           const newAccessToken = await instance.post(refreshTokenURL, {
-            refreshToken,
+            refreshToken: refreshToken?.token,
           });
 
           // Save the new access token to local storage
@@ -69,6 +68,7 @@ class HttpClient {
           error.response?.status === 401
         ) {
           // when really expire, redirect to login
+          store.dispatch(authActions.setAccount(null));
           store.dispatch(
             authActions.setToken({ accessToken: {}, refreshToken: {} })
           );

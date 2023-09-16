@@ -1,9 +1,9 @@
 import { Button, Form, Input, Modal, Select, notification } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 import accountService from "../../api/account.api";
 import { ROLES } from "../../common/constant";
 
-const AddAccountModal = ({ onCancel }) => {
+const AddAccountModal = ({ onCancel, onSucces }) => {
   const handleSubmit = async (values) => {
     try {
       // eslint-disable-next-line no-unused-vars
@@ -13,6 +13,7 @@ const AddAccountModal = ({ onCancel }) => {
         profile: profileData,
       });
       notification.success({ message: "Tao thanh cong" });
+      onSucces();
     } catch (error) {
       console.error(error);
       notification.error({ message: "Loi" });
