@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   account: null,
-  token: {
+  tokens: {
     accessToken: {},
     refreshToken: {},
   },
@@ -13,7 +13,7 @@ export const authenticationSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action) => {
-      state.token = action.payload;
+      state.tokens = action.payload;
     },
     setAccount: (state, action) => {
       state.account = action.payload;

@@ -1,3 +1,9 @@
+export const ROLES = {
+  ADMIN: "ADMIN",
+  DOCTOR: "DOCTOR",
+  CUSTOMER: "CUSTOMER",
+};
+
 export const ROUTE_PATH = {
   // public route
   LOGIN: "/login",
@@ -5,4 +11,5 @@ export const ROUTE_PATH = {
 
   //private route
   HOME: "/",
+  ACCOUNT: "/account",
 };

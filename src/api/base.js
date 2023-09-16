@@ -6,19 +6,19 @@ class HttpClient {
   axiosInstance;
   constructor() {
     const instance = axios.create({
-      baseURL: import.meta.env.REACT_APP_API_BASE_URL,
+      baseURL: import.meta.env.VITE_REACT_APP_API_BASE_URL,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       timeout: 5000,
     });
-    const { accessToken, refreshToken } = store.getState().authentication.token;
 
     instance.interceptors.request.use(
       async (config) => {
+        const { access: accessToken } = store.getState().authentication.tokens;
         if (accessToken) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
+          config.headers["Authorization"] = `Bearer ${accessToken.token}`;
         }
 
         return config;
@@ -31,6 +31,9 @@ class HttpClient {
     instance.interceptors.response.use(
       (response) => response,
       async (error) => {
+        const { refresh: refreshToken } =
+          store.getState().authentication.tokens;
+        console.log(refreshToken);
         const refreshTokenURL = "/auth/refresh-token";
         const originalRequest = error.config;
 
@@ -81,7 +84,6 @@ class HttpClient {
 }
 
 export class ServiceBase extends HttpClient {
-  onChangeListeners = {};
   get = this.axiosInstance.get;
   put = this.axiosInstance.put;
   patch = this.axiosInstance.patch;

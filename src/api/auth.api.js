@@ -1,12 +1,13 @@
-import { ServiceBase } from "services/http/service-base";
+import { ServiceBase } from "./base";
 
 class AuthService extends ServiceBase {
   login = async (data) => {
-    const res = await this.post(`/sign-in/`, data);
+    const res = await this.post(`/auth/sign-in/`, data);
+    console.log(res);
     return res.data;
   };
-  register = async (data) => {
-    const res = await this.post(`/sign-up/`, data);
+  logout = async (data) => {
+    const res = await this.post(`/auth/logout/`, data);
     return res.data;
   };
 }
