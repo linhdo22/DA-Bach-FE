@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import { titleLoader } from "./common/helper";
-
 import Layout from "./view/layout/Layout";
 import LoginPage from "./view/login/LoginPage";
 import { ROUTE_PATH } from "./common/constant";
@@ -9,6 +8,8 @@ import AccountPage from "./view/account/AccountPage";
 import PrivateRoutes from "./view/layout/PrivateRoutes";
 import UnauthorizedRoutes from "./view/layout/UnauthorizedRoutes";
 import DrugPage from "./view/drug/DrugPage";
+import ForgotPassword from "./view/login/ForgotPassword";
+import ResetPassword from "./view/login/ResetPassword";
 
 const LIST_PUBLIC_ROUTE = [
   {
@@ -20,6 +21,16 @@ const LIST_PUBLIC_ROUTE = [
     title: "Register",
     path: ROUTE_PATH.REGISTER,
     component: <LoginPage />,
+  },
+  {
+    title: "Forgot password",
+    path: ROUTE_PATH.FORGOT_PASSWORD,
+    component: <ForgotPassword />,
+  },
+  {
+    title: "Reset password",
+    path: ROUTE_PATH.RESET_PASSWORD,
+    component: <ResetPassword />,
   },
 ];
 

@@ -10,6 +10,14 @@ class AuthService extends ServiceBase {
     const res = await this.post(`/auth/logout/`, data);
     return res.data;
   };
+  forgotPassword = async (data) => {
+    const res = await this.post(`/auth/forgot-password/`, data);
+    return res.data;
+  };
+  resetPassword = async (data) => {
+    const res = await this.post(`/auth/reset-password/`, data);
+    return res.data;
+  };
 }
 
 const authService = new AuthService();

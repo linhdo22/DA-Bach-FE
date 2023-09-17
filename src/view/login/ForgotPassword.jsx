@@ -1,26 +1,25 @@
-import { Button, Form, Input, Typography, notification } from "antd";
 import { defaultColors } from "../../common/color";
-import authService from "../../api/auth.api";
-import { useDispatch } from "react-redux";
-import { authActions } from "../../store/authenticationSlice";
+import { Button, Form, Input, Typography, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "../../common/constant";
+import authService from "../../api/auth.api";
 
-const LoginPage = () => {
-  const dispatch = useDispatch();
+function ForgotPassword() {
   const navigate = useNavigate();
   const handleFinish = async (values) => {
+    console.log("123");
     try {
-      const response = await authService.login(values);
-      const { account, tokens } = response.data;
-      dispatch(authActions.setToken(tokens));
-      dispatch(authActions.setAccount(account));
-      navigate(ROUTE_PATH.HOME);
+      await authService.forgotPassword({ email: values.email });
+      notification.info({
+        message: `Info have sent to email: ${values.email}`,
+        duration: 10000,
+      });
     } catch (error) {
       console.log(error);
-      notification.error({ message: "Something wrong!" });
+      notification.error({ message: "Invalid email" });
     }
   };
+
   return (
     <div
       style={{
@@ -35,7 +34,7 @@ const LoginPage = () => {
       <div
         style={{
           width: 400,
-          minHeight: 300,
+          minHeight: 250,
           borderRadius: 20,
           backgroundColor: "white",
           border: `1px solid ${defaultColors.primary}`,
@@ -46,7 +45,7 @@ const LoginPage = () => {
           level={3}
           style={{ textAlign: "center", margin: "0 0 24px 0" }}
         >
-          Welcome
+          Forgot password
         </Typography.Title>
         <Form onFinish={handleFinish}>
           <Form.Item
@@ -57,40 +56,20 @@ const LoginPage = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            labelCol={{ span: 24 }}
-            rules={[{ required: true, type: "string", min: 6 }]}
-          >
-            <Input type="password" />
-          </Form.Item>
           <Button
             type="primary"
             style={{ width: "100%", marginTop: 16 }}
             htmlType="submit"
           >
-            Login
+            Request change password
           </Button>
         </Form>
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "end",
-            marginTop: 8,
-          }}
-        >
-          <Button
-            type="link"
-            onClick={() => navigate(ROUTE_PATH.FORGOT_PASSWORD)}
-          >
-            Forgot password
-          </Button>
-        </div>
+        <Button type="link" onClick={() => navigate(ROUTE_PATH.LOGIN)}>
+          Back to login
+        </Button>
       </div>
     </div>
   );
-};
+}
 
-export default LoginPage;
+export default ForgotPassword;
