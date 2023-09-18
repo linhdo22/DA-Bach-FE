@@ -16,7 +16,8 @@ class HttpClient {
 
     instance.interceptors.request.use(
       async (config) => {
-        const { access: accessToken } = store.getState().authentication.tokens;
+        const { access: accessToken } =
+          store.getState().authentication.tokens ?? {};
         if (accessToken) {
           config.headers["Authorization"] = `Bearer ${accessToken.token}`;
         }
@@ -32,7 +33,7 @@ class HttpClient {
       (response) => response,
       async (error) => {
         const { refresh: refreshToken } =
-          store.getState().authentication.tokens;
+          store.getState().authentication.tokens ?? {};
         const refreshTokenURL = "/auth/refresh-token";
         const originalRequest = error.config;
 

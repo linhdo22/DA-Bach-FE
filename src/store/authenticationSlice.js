@@ -18,8 +18,8 @@ export const authenticationSlice = createSlice({
     setAccount: (state, action) => {
       state.account = action.payload;
     },
-    authLogout: (state) => {
-      state.account = null;
+    authLogout: () => {
+      return initialState;
     },
   },
 });

@@ -21,6 +21,14 @@ class AccountService extends ServiceBase {
     const res = await this.delete(`/account/`, { data });
     return res.data;
   };
+  changePassword = async (data) => {
+    const res = await this.post(`/account/change-password`, data);
+    return res.data;
+  };
+  changeProfile = async (data) => {
+    const res = await this.post(`/account/change-profile`, data);
+    return res.data;
+  };
 }
 
 const accountService = new AccountService();

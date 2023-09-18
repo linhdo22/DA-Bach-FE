@@ -10,6 +10,7 @@ import UnauthorizedRoutes from "./view/layout/UnauthorizedRoutes";
 import DrugPage from "./view/drug/DrugPage";
 import ForgotPassword from "./view/login/ForgotPassword";
 import ResetPassword from "./view/login/ResetPassword";
+import ProfilePage from "./view/profile/ProfilePage";
 
 const LIST_PUBLIC_ROUTE = [
   {
@@ -49,6 +50,11 @@ const LIST_PRIVATE_ROUTE = [
     title: "Drug Management",
     path: ROUTE_PATH.DRUG,
     component: <DrugPage />,
+  },
+  {
+    title: "Profile",
+    path: ROUTE_PATH.PROFILE,
+    component: <ProfilePage />,
   },
 ];
 

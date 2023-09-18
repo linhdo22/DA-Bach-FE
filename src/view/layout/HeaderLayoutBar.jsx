@@ -3,9 +3,12 @@ import React from "react";
 import { defaultColors } from "../../common/color";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/authenticationSlice";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATH } from "../../common/constant";
 
 const HeaderLayoutBar = (props) => {
   const account = useSelector((state) => state.authentication.account);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <div
@@ -36,6 +39,13 @@ const HeaderLayoutBar = (props) => {
             <Typography.Title level={5} style={{ margin: 0 }}>
               {account?.name ?? account?.email}
             </Typography.Title>
+            <Button
+              style={{ marginBottom: 10 }}
+              color="red"
+              onClick={() => navigate(ROUTE_PATH.PROFILE)}
+            >
+              Profile
+            </Button>
             <Button
               type="primary"
               color="red"

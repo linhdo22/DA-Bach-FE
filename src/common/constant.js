@@ -15,4 +15,5 @@ export const ROUTE_PATH = {
   HOME: "/",
   ACCOUNT: "/account",
   DRUG: "/drug",
+  PROFILE: "/profile",
 };

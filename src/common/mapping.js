@@ -1,6 +1,6 @@
 import { ROLES } from "./constant";
 
-const roleMapping = {
+export const roleMapping = {
   [ROLES.ADMIN]: "Admin",
   [ROLES.CUSTOMER]: "Customer",
   [ROLES.DOCTOR]: "Doctor",

@@ -1,4 +1,9 @@
-import { HomeOutlined, TeamOutlined, AliyunOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  TeamOutlined,
+  AliyunOutlined,
+  ProfileOutlined,
+} from "@ant-design/icons";
 import { Menu } from "antd";
 import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,6 +15,11 @@ const defaultSections = [
     label: "Home",
     key: ROUTE_PATH.HOME,
     icon: <HomeOutlined />,
+  },
+  {
+    label: "Profile",
+    key: ROUTE_PATH.PROFILE,
+    icon: <ProfileOutlined />,
   },
 ];
 
