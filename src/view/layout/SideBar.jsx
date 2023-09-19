@@ -3,6 +3,7 @@ import {
   TeamOutlined,
   AliyunOutlined,
   ProfileOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import React, { useLayoutEffect, useState } from "react";
@@ -36,6 +37,18 @@ const adminSections = [
   },
 ];
 
+const doctorAndCustomerSections = [
+  {
+    label: "Booking",
+    key: ROUTE_PATH.BOOKING,
+    icon: <ScheduleOutlined />,
+  },
+];
+
+const doctorSections = [];
+
+const customerSections = [];
+
 const SideBar = () => {
   const account = useSelector((state) => state.authentication.account);
   const navigate = useNavigate();
@@ -50,9 +63,22 @@ const SideBar = () => {
   if (account?.role === ROLES.ADMIN) {
     items = [...items, ...adminSections];
   }
+  if (account?.role === ROLES.DOCTOR) {
+    items = [...items, ...doctorSections];
+  }
+  if (account?.role === ROLES.CUSTOMER) {
+    items = [...items, ...customerSections];
+  }
+  if ([ROLES.CUSTOMER, ROLES.DOCTOR].includes(account.role)) {
+    items = [...items, ...doctorAndCustomerSections];
+  }
 
   useLayoutEffect(() => {
-    setSelectedKey([location.pathname]);
+    setSelectedKey([
+      Object.values(ROUTE_PATH).find(
+        (p) => p !== "/" && location.pathname.includes(p)
+      ) ?? location.pathname,
+    ]);
   }, [location]);
   return (
     <Menu

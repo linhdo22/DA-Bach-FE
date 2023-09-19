@@ -11,6 +11,8 @@ import DrugPage from "./view/drug/DrugPage";
 import ForgotPassword from "./view/login/ForgotPassword";
 import ResetPassword from "./view/login/ResetPassword";
 import ProfilePage from "./view/profile/ProfilePage";
+import BookingPage from "./view/booking/BookingPage";
+import BookingDetail from "./view/booking/BookingDetail";
 
 const LIST_PUBLIC_ROUTE = [
   {
@@ -55,6 +57,16 @@ const LIST_PRIVATE_ROUTE = [
     title: "Profile",
     path: ROUTE_PATH.PROFILE,
     component: <ProfilePage />,
+  },
+  {
+    title: "Booking",
+    path: `${ROUTE_PATH.BOOKING}/:id`,
+    component: <BookingDetail />,
+  },
+  {
+    title: "Booking",
+    path: ROUTE_PATH.BOOKING,
+    component: <BookingPage />,
   },
 ];
 
