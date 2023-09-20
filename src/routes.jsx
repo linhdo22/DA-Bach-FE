@@ -13,6 +13,9 @@ import ResetPassword from "./view/login/ResetPassword";
 import ProfilePage from "./view/profile/ProfilePage";
 import BookingPage from "./view/booking/BookingPage";
 import BookingDetail from "./view/booking/BookingDetail";
+import ViewPDF from "./view/view-pdf/ViewPDF";
+import DiagnosisPage from "./view/diagnosis/Diagnosis";
+import FeedbackPage from "./view/feedback/FeedbackPage";
 
 const LIST_PUBLIC_ROUTE = [
   {
@@ -68,6 +71,16 @@ const LIST_PRIVATE_ROUTE = [
     path: ROUTE_PATH.BOOKING,
     component: <BookingPage />,
   },
+  {
+    title: "Diagnoses",
+    path: ROUTE_PATH.DIAGNOSES,
+    component: <DiagnosisPage />,
+  },
+  {
+    title: "Feedback",
+    path: ROUTE_PATH.FEEDBACK,
+    component: <FeedbackPage />,
+  },
 ];
 
 const routes = createBrowserRouter([
@@ -91,6 +104,11 @@ const routes = createBrowserRouter([
       path: route.path,
       element: route.component,
     })),
+  },
+  {
+    loader: titleLoader("View PDF"),
+    path: ROUTE_PATH.VIEW_PDF,
+    element: <ViewPDF />,
   },
 ]);
 

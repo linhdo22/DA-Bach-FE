@@ -25,8 +25,8 @@ const BookingPage = () => {
     start: moment(b.start).toDate(),
     end: moment(b.end).toDate(),
     title:
-      b[isDoctor ? "doctor" : "customer"].name ||
-      b[isDoctor ? "doctor" : "customer"].email,
+      b[isDoctor ? "customer" : "doctor"].name ||
+      b[isDoctor ? "customer" : "doctor"].email,
     resource: b,
   }));
 

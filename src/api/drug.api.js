@@ -6,7 +6,7 @@ class DrugService extends ServiceBase {
     return res.data;
   };
   search = async (data) => {
-    const res = await this.get(`/drug/`, { params: data });
+    const res = await this.get(`/drug/search`, { params: data });
     return res.data;
   };
   getList = async (data) => {

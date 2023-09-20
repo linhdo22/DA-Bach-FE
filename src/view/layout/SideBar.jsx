@@ -4,6 +4,8 @@ import {
   AliyunOutlined,
   ProfileOutlined,
   ScheduleOutlined,
+  FileTextOutlined,
+  CommentOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import React, { useLayoutEffect, useState } from "react";
@@ -45,9 +47,21 @@ const doctorAndCustomerSections = [
   },
 ];
 
-const doctorSections = [];
+const doctorSections = [
+  {
+    label: "Feedback",
+    key: ROUTE_PATH.FEEDBACK,
+    icon: <CommentOutlined />,
+  },
+];
 
-const customerSections = [];
+const customerSections = [
+  {
+    label: "Diagnoses",
+    key: ROUTE_PATH.DIAGNOSES,
+    icon: <FileTextOutlined />,
+  },
+];
 
 const SideBar = () => {
   const account = useSelector((state) => state.authentication.account);
@@ -63,14 +77,14 @@ const SideBar = () => {
   if (account?.role === ROLES.ADMIN) {
     items = [...items, ...adminSections];
   }
+  if ([ROLES.CUSTOMER, ROLES.DOCTOR].includes(account?.role)) {
+    items = [...items, ...doctorAndCustomerSections];
+  }
   if (account?.role === ROLES.DOCTOR) {
     items = [...items, ...doctorSections];
   }
   if (account?.role === ROLES.CUSTOMER) {
     items = [...items, ...customerSections];
-  }
-  if ([ROLES.CUSTOMER, ROLES.DOCTOR].includes(account.role)) {
-    items = [...items, ...doctorAndCustomerSections];
   }
 
   useLayoutEffect(() => {

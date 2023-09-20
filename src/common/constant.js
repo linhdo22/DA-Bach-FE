@@ -10,6 +10,7 @@ export const ROUTE_PATH = {
   REGISTER: "/register",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  VIEW_PDF: "/view-pdf",
 
   //private route
   HOME: "/",
@@ -17,4 +18,6 @@ export const ROUTE_PATH = {
   DRUG: "/drug",
   PROFILE: "/profile",
   BOOKING: "/booking",
+  DIAGNOSES: "/diagnoses",
+  FEEDBACK: "/feedback",
 };
