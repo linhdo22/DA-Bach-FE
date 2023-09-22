@@ -10,7 +10,7 @@ class RatingService extends ServiceBase {
     return res.data;
   };
   check = async (params) => {
-    const res = await this.get(`/check`, { params });
+    const res = await this.get(`/rating/check`, { params });
     return res.data;
   };
 }

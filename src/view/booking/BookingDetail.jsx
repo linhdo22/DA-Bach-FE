@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Input, Row, Tag, Typography } from "antd";
+import { Button, Col, Divider, Image, Input, Row, Tag, Typography } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import ratingService from "../../api/rating.api";
 import { ROLES, ROUTE_PATH } from "../../common/constant";
 import DiagnoseModal from "./DiagnoseModal";
 import FeedbackModal from "./FeedbackModal";
+import UpdateDiagnoseModal from "./UpdateDiagnoseModal";
 
 const UserInfo = ({ info }) => {
   return (
@@ -42,6 +43,28 @@ const UserInfo = ({ info }) => {
         <Typography.Text strong>Phone:</Typography.Text>
         <Typography.Text>{info.phone}</Typography.Text>
       </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: 5,
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography.Text strong>Gender:</Typography.Text>
+        <Typography.Text>{info.gender}</Typography.Text>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: 5,
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography.Text strong>Date of birth:</Typography.Text>
+        <Typography.Text>
+          {moment(info.dateOfBirth).format("YYYY-MM-DD")}
+        </Typography.Text>
+      </div>
     </>
   );
 };
@@ -51,15 +74,18 @@ const BookingDetail = () => {
   const { id } = useParams();
   const [booking, setBooking] = useState();
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isRated, setIsRated] = useState();
 
   const handleFinish = async (values) => {
     try {
+      const { file, ...data } = values;
       const response = await bookingService.finish({
-        ...values,
+        ...data,
         customerId: booking.customer.id,
         bookingId: booking.id,
+        image: file?.file?.response?.filename,
       });
       setBooking(response.data);
       setIsFinishModalOpen(false);
@@ -68,8 +94,25 @@ const BookingDetail = () => {
     }
   };
 
+  const handleUpdate = async (values) => {
+    try {
+      const { file, ...data } = values;
+      const response = await bookingService.updateDiagnosis({
+        ...data,
+        customerId: booking.customer.id,
+        bookingId: booking.id,
+        diagnosisId: booking.diagnosis.id,
+        image: file?.file?.response?.filename,
+      });
+      setBooking(response.data);
+      setIsUpdateModalOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handlePrintPDF = () => {
-    localStorage.setItem("drugs", JSON.stringify(booking.diagnosis.drugs));
+    localStorage.setItem("info", JSON.stringify(booking));
     window.open(ROUTE_PATH.VIEW_PDF);
   };
 
@@ -97,6 +140,7 @@ const BookingDetail = () => {
   useEffect(() => {
     async function check() {
       try {
+        if (!booking?.doctor || !booking?.customer) return;
         const response = await ratingService.check({
           doctorId: booking.doctor.id,
           customerId: booking.customer.id,
@@ -121,6 +165,12 @@ const BookingDetail = () => {
         isOpen={isFinishModalOpen}
         onSubmit={handleFinish}
         onCancel={() => setIsFinishModalOpen(false)}
+      />
+      <UpdateDiagnoseModal
+        diagnosis={booking.diagnosis}
+        isOpen={isUpdateModalOpen}
+        onSubmit={handleUpdate}
+        onCancel={() => setIsUpdateModalOpen(false)}
       />
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
@@ -247,7 +297,18 @@ const BookingDetail = () => {
       <Divider style={{ margin: "20px 0px 0px" }} />
       <Row>
         <Col span={14}>
-          <Typography.Title level={5}>Dignosis</Typography.Title>
+          <Typography.Title level={5}>
+            Dignosis{" "}
+            {account.role === ROLES.DOCTOR && booking.isFinished && (
+              <Button
+                style={{ marginLeft: 10 }}
+                size="small"
+                onClick={() => setIsUpdateModalOpen(true)}
+              >
+                Update
+              </Button>
+            )}
+          </Typography.Title>
           <b>- Doctor {booking.doctor.name}:</b>
           <Input.TextArea
             style={{ marginTop: 10, minHeight: 200 }}
@@ -282,6 +343,18 @@ const BookingDetail = () => {
           </Col>
         )}
       </Row>
+      {booking.diagnosis?.image && (
+        <div style={{ paddingBottom: 50 }}>
+          <Typography.Title level={5}>Attachment</Typography.Title>
+          <Image
+            src={`${import.meta.env.VITE_REACT_APP_API_BASE_URL.replace(
+              "/api",
+              ""
+            )}/${booking.diagnosis?.image}`}
+            width={100}
+          />
+        </div>
+      )}
     </div>
   );
 };

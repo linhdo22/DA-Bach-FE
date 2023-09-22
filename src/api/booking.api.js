@@ -9,8 +9,16 @@ class BookingService extends ServiceBase {
     const res = await this.get(`/booking/${id}`);
     return res.data;
   };
+  updateDiagnosis = async (data) => {
+    const res = await this.patch(`/booking/diagnosis`, data);
+    return res.data;
+  };
   finish = async (data) => {
     const res = await this.patch(`/booking/finish`, data);
+    return res.data;
+  };
+  upload = async (data) => {
+    const res = await this.patch(`/booking/upload`, data);
     return res.data;
   };
   remove = async (data) => {

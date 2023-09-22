@@ -4,6 +4,11 @@ export const ROLES = {
   CUSTOMER: "CUSTOMER",
 };
 
+export const GENDER = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+};
+
 export const ROUTE_PATH = {
   // public route
   LOGIN: "/login",

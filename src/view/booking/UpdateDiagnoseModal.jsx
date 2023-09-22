@@ -11,11 +11,11 @@ import {
   Upload,
 } from "antd";
 import debounce from "lodash/debounce";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import drugService from "../../api/drug.api";
 import { UploadOutlined } from "@ant-design/icons";
 
-const DiagnoseModal = ({ isOpen, onCancel, onSubmit }) => {
+const UpdateDiagnoseModal = ({ isOpen, diagnosis, onCancel, onSubmit }) => {
   const [options, setOptions] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
@@ -40,6 +40,21 @@ const DiagnoseModal = ({ isOpen, onCancel, onSubmit }) => {
     }
   }, []);
   const debouncedSearch = debounce(search, 500);
+
+  useEffect(() => {
+    async function fetch() {
+      if (diagnosis) {
+        const { drugs, ...values } = diagnosis;
+        await Promise.all(
+          drugs.map((d, index) => {
+            return search(d.name, index);
+          })
+        );
+        form.setFieldsValue({ ...values, drugs });
+      }
+    }
+    fetch();
+  }, [diagnosis, isOpen, form]);
 
   return (
     <Modal
@@ -89,38 +104,41 @@ const DiagnoseModal = ({ isOpen, onCancel, onSubmit }) => {
                       options={options[key]}
                     />
                   </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "count"]}
-                    style={{ marginRight: 20 }}
-                    rules={[
-                      {
-                        validator: (_, value) => {
-                          if (!value) {
-                            return Promise.reject("Invalid value");
-                          }
-                          const maxStock = options[key]?.find(
-                            (op) => op.value === drugsWatch?.[key]?.id
-                          )?.stock;
-                          if (maxStock && value > maxStock) {
-                            return Promise.reject("Check stock");
-                          }
-                          return Promise.resolve();
-                        },
-                      },
-                    ]}
+                  <Badge
+                    count={
+                      options[key]?.find(
+                        (op) => op.value === drugsWatch?.[key]?.id
+                      )?.stock
+                    }
                   >
-                    <Badge
-                      count={
-                        options[key]?.find(
-                          (op) => op.value === drugsWatch?.[key]?.id
-                        )?.stock
-                      }
+                    <Form.Item
+                      {...restField}
+                      name={[name, "count"]}
+                      rules={[
+                        {
+                          validator: (_, value) => {
+                            if (!value) {
+                              return Promise.reject("Invalid value");
+                            }
+                            const maxStock = options[key]?.find(
+                              (op) => op.value === drugsWatch?.[key]?.id
+                            )?.stock;
+                            if (maxStock && value > maxStock) {
+                              return Promise.reject("Check stock");
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
                     >
                       <InputNumber controls={false} />
-                    </Badge>
-                  </Form.Item>
-                  <Button danger onClick={() => remove(name)}>
+                    </Form.Item>
+                  </Badge>
+                  <Button
+                    style={{ marginLeft: 20 }}
+                    danger
+                    onClick={() => remove(name)}
+                  >
                     Remove
                   </Button>
                 </div>
@@ -139,4 +157,4 @@ const DiagnoseModal = ({ isOpen, onCancel, onSubmit }) => {
   );
 };
 
-export default DiagnoseModal;
+export default UpdateDiagnoseModal;

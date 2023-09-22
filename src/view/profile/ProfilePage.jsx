@@ -1,5 +1,6 @@
 import {
   Button,
+  DatePicker,
   Divider,
   Form,
   Input,
@@ -7,12 +8,16 @@ import {
   Typography,
   notification,
 } from "antd";
+import moment from "moment";
+import momentGenerateConfig from "rc-picker/lib/generate/moment";
 import React, { useEffect } from "react";
-import { roleMapping } from "../../common/mapping";
 import { useDispatch, useSelector } from "react-redux";
-import { ROLES } from "../../common/constant";
 import accountService from "../../api/account.api";
+import { GENDER, ROLES } from "../../common/constant";
+import { genderMapping, roleMapping } from "../../common/mapping";
 import { authActions } from "../../store/authenticationSlice";
+
+const MyDatePicker = DatePicker.generatePicker(momentGenerateConfig);
 
 const ProfilePage = () => {
   const account = useSelector((state) => state.authentication.account);
@@ -21,10 +26,15 @@ const ProfilePage = () => {
   const [passwordForm] = Form.useForm();
 
   const handleChangeProfile = async (values) => {
-    const { name, phone } = values;
+    const { name, phone, gender, dateOfBirth } = values;
     if (!name && !phone) return;
     try {
-      const response = await accountService.changeProfile({ name, phone });
+      const response = await accountService.changeProfile({
+        name,
+        phone,
+        gender,
+        dateOfBirth: moment(dateOfBirth).format("YYYY-MM-DD"),
+      });
       dispatch(authActions.setAccount({ ...account, ...response.data }));
       notification.success({ message: "Success" });
     } catch (error) {
@@ -52,8 +62,16 @@ const ProfilePage = () => {
     value: r,
   }));
 
+  const genderOption = Object.values(GENDER).map((g) => ({
+    value: g,
+    label: genderMapping[g],
+  }));
+
   useEffect(() => {
-    infoForm.setFieldsValue(account);
+    if (account) {
+      const { dateOfBirth, ...values } = account;
+      infoForm.setFieldsValue({ dateOfBirth: moment(dateOfBirth), ...values });
+    }
   }, [account, infoForm]);
 
   if (!account) {
@@ -93,6 +111,16 @@ const ProfilePage = () => {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item name="gender" label="Gender" labelCol={{ span: 24 }}>
+            <Select options={genderOption} />
+          </Form.Item>
+          <Form.Item
+            name="dateOfBirth"
+            label="Date of Birth"
+            labelCol={{ span: 24 }}
+          >
+            <MyDatePicker />
           </Form.Item>
           <Button htmlType="submit">Save</Button>
         </Form>
